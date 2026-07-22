@@ -2,9 +2,7 @@
 name = "transan"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "svmikhaylov333",email = "svmikhaylov333@gmail.com"}
-]
+authors = []
 requires-python = ">=3.12"
 dependencies = [
     "pandas (>=3.0.3,<4.0.0)"
@@ -14,3 +12,33 @@ dependencies = [
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+lint = [
+    "flake8 (>=7.3.0,<8.0.0)",
+    "black (>=26.5.1,<27.0.0)",
+    "isort (>=8.0.1,<9.0.0)",
+    "mypy (>=2.1.0,<3.0.0)"
+]
+dev = [
+    "flake8 (>=7.3.0,<8.0.0)",
+    "pytest (>=9.0.3,<10.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "pandas-stubs (>=3.0.3.260530,<4.0.0.0)"
+]
+
+[tool.black]
+line-length = 119
+target-version = ['py312']
+
+[tool.isort]
+line_length = 119
+
+[tool.mypy]
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_return_any = true
+exclude = 'venv'
+
+[tool.poetry]
+package-mode = false
