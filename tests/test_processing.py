@@ -4,10 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pandas as pd
 
-from src.file_processing import  read_excel_operations
-
-
-
+from src.file_processing import read_excel_operations
 
 # Тесты для EXCEL
 
@@ -113,5 +110,3 @@ def test_read_excel_operations_with_nan(mock_read_excel: MagicMock) -> None:
         assert result[1]["from"] == "Visa 1234"
     finally:
         os.unlink(tmp_file_path)
-
-
