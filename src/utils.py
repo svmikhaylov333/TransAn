@@ -18,18 +18,18 @@ def greeting(time: str) -> str:
     """Функция, которая возвращает приветствие в зависимости от времени
     на входе время в формате 'YYYY-MM-DD HH:MM:SS'
     на выходе: приветствие"""
-
-    dt = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
-    hour = dt.hour
     try:
+        dt = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+        hour = dt.hour
+
         if 6 <= hour < 12:
-            return "Доброе утро"
+            return "Доброе утро!"
         elif 12 <= hour < 18:
-            return "Добрый день"
+            return "Добрый день!"
         elif 18 <= hour < 23:
-            return "Добрый вечер"
+            return "Добрый вечер!"
         else:
-            return "Доброй ночи"
+            return "Доброй ночи!"
     except ValueError as exp:
         logger.error(f"Ошибка парсинга даты: {exp}")
         return "Здравствуйте!"
