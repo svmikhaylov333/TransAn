@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
@@ -97,3 +98,18 @@ def load_transactions(excel_path: str) -> pd.DataFrame:
 
     logger.info(f"Загружено {len(df)} транзакций из {excel_path}")
     return df
+
+
+# ====================
+# 2. Фильтрация даты
+# ====================
+
+
+def filter_by_date(df: pd.DataFrame, date: str) -> pd.DataFrame:
+    """Функция для фильтрации транзакции с начала месяца по указанную дату."""
+    final_date = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+    start_date = final_date.replace(day=1, hour=0, minute=0, second=0)
+    mask: pd.Series = (df["date"] >= start_date) & (df["date"] <= final_date)
+    filtered: pd.DataFrame = df[mask].copy()
+    logger.info(f" с {start_date.date()} по {final_date.date()}, найдено {len(filtered)} транзакций")
+    return filtered
