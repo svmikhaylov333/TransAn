@@ -31,8 +31,17 @@ file_handler.setLevel(logging.DEBUG)
 
 file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 file_handler.setFormatter(file_formatter)
-
 logger.addHandler(file_handler)
+
+# # ====================
+# # логгер в консоль
+# #====================
+# console_handler = logging.StreamHandler()
+# console_handler.setLevel(logging.DEBUG)
+# console_handler.setFormatter(file_formatter)
+# logger.addHandler(console_handler)
+# ====================
+
 
 # ====================
 # Функции
@@ -134,3 +143,79 @@ def get_last_digits(card_number: Optional[str]) -> str:
     except Exception as exp:
         logger.error(f"Ошибка типа данных для card_number={card_number}: {exp}")
         return "0000"
+
+
+# ====================
+# 5. Данные по картам
+# ====================
+
+
+def get_card_transactions(df: pd.DataFrame) -> List[Dict]:
+    """
+    Функция анализирует транзакции по картам.
+    Возвращает список с данными по каждой карте - последние 4 цифры, общая сумма расходов, кешбэк 1р с 100р
+    """
+    card_data = []
+
+    if "card_number" not in df.columns or "amount" not in df.columns:
+        return []
+
+    expenses_df = df[df["amount"] < 0].copy()
+
+    if len(expenses_df) == 0:
+        return []
+
+    expenses_df["abs_amount"] = abs(expenses_df["amount"])
+
+    grouped = expenses_df.groupby("card_number").agg({"abs_amount": "sum"}).reset_index()
+
+    for index, row in grouped.iterrows():
+        card_number = row["card_number"]
+        expenses = float(row["abs_amount"])
+        cashback = int(expenses // 100)  # 1 рубль на каждые 100 рублей
+
+        card_data.append(
+            {"last_digits": get_last_digits(card_number), "total_expenses": int(expenses), "cashback": cashback}
+        )
+
+    logger.info(f"Найдено {len(card_data)} карт")
+    return card_data
+
+
+# ====================
+# 6. Топ-5 транзакций
+# ====================
+def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
+    """Функция Возвращает топ-N (по умолчанию 5) транзакций по платежу (расходу)."""
+
+    df_sorted: pd.DataFrame = df[df["amount"] < 0].copy()  # type: ignore
+
+    if len(df_sorted) == 0:
+        return []
+
+    df_sorted["abs_amount"] = abs(df_sorted["amount"])
+    df_sorted = df_sorted.sort_values("abs_amount", ascending=False)
+    df_sorted = df_sorted.head(n)
+
+    top_transactions = []
+    for index, row in df_sorted.iterrows():
+        top_transactions.append(
+            {
+                "date": row["date"].strftime("%d.%m.%Y"),
+                "amount": int(row["amount"]),
+                "category": row.get("category", "Неизвестно"),
+                "description": row.get("description", ""),
+            }
+        )
+    return top_transactions
+
+
+# ====================
+# 7. Цены акций
+# ====================
+def get_stock_prices() -> None:
+    """Получает цены акций по API"""
+    # заглушка. найти где-нибудь АПИ
+
+
+pass
