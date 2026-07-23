@@ -1,12 +1,12 @@
-2026-07-23 00:48:01 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmpgmdwj9ug.xlsx
-2026-07-23 00:48:01 - src.file_processing - INFO - Успешно загружено 2 транзакций из Excel
-2026-07-23 00:48:01 - src.file_processing - DEBUG - Чтение Excel-файла: non_existent_file.xlsx
-2026-07-23 00:48:01 - src.file_processing - WARNING - Excel-файл non_existent_file.xlsxне найден 
-2026-07-23 00:48:01 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmpmr0srmht.xlsx
-2026-07-23 00:48:01 - src.file_processing - WARNING - Excel-файл C:\Users\serge\AppData\Local\Temp\tmpmr0srmht.xlsx пуст
-2026-07-23 00:48:01 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmpsai5bqke.xlsx
-2026-07-23 00:48:01 - src.file_processing - ERROR - Ошибка чтения Excel-файла C:\Users\serge\AppData\Local\Temp\tmpsai5bqke.xlsx: Excel format error
-2026-07-23 00:48:01 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmp7xtpux35.xlsx
-2026-07-23 00:48:01 - src.file_processing - ERROR - Ошибка при чтении Excel-файла C:\Users\serge\AppData\Local\Temp\tmp7xtpux35.xlsx: General error
-2026-07-23 00:48:01 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmp4k0fba9u.xlsx
-2026-07-23 00:48:01 - src.file_processing - INFO - Успешно загружено 2 транзакций из Excel
+2026-07-24 00:23:37 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmpzraw2_uw.xlsx
+2026-07-24 00:23:37 - src.file_processing - INFO - Успешно загружено 2 транзакций из Excel
+2026-07-24 00:23:37 - src.file_processing - DEBUG - Чтение Excel-файла: non_existent_file.xlsx
+2026-07-24 00:23:37 - src.file_processing - WARNING - Excel-файл non_existent_file.xlsxне найден 
+2026-07-24 00:23:37 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmp2djkk1t6.xlsx
+2026-07-24 00:23:37 - src.file_processing - WARNING - Excel-файл C:\Users\serge\AppData\Local\Temp\tmp2djkk1t6.xlsx пуст
+2026-07-24 00:23:37 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmp26l6bwwk.xlsx
+2026-07-24 00:23:37 - src.file_processing - ERROR - Ошибка чтения Excel-файла C:\Users\serge\AppData\Local\Temp\tmp26l6bwwk.xlsx: Excel format error
+2026-07-24 00:23:37 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmps35zgc_b.xlsx
+2026-07-24 00:23:37 - src.file_processing - ERROR - Ошибка при чтении Excel-файла C:\Users\serge\AppData\Local\Temp\tmps35zgc_b.xlsx: General error
+2026-07-24 00:23:37 - src.file_processing - DEBUG - Чтение Excel-файла: C:\Users\serge\AppData\Local\Temp\tmpa78o9l44.xlsx
+2026-07-24 00:23:37 - src.file_processing - INFO - Успешно загружено 2 транзакций из Excel

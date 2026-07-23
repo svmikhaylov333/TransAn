@@ -5,7 +5,7 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import pandas as pd
 
@@ -69,7 +69,7 @@ def load_transactions(excel_path: str) -> pd.DataFrame:
     if not operations:
         logger.warning(f"Не удалось загрузить данные из {excel_path}")
         return pd.DataFrame()
-    df = pd.DataFrame()
+    df = pd.DataFrame(operations)
     df.columns = df.columns.str.lower()
 
     # Приведение дат
@@ -101,7 +101,7 @@ def load_transactions(excel_path: str) -> pd.DataFrame:
 
 
 # ====================
-# 2. Фильтрация даты
+# 3. Фильтрация даты
 # ====================
 
 
@@ -113,3 +113,24 @@ def filter_by_date(df: pd.DataFrame, date: str) -> pd.DataFrame:
     filtered: pd.DataFrame = df[mask].copy()
     logger.info(f" с {start_date.date()} по {final_date.date()}, найдено {len(filtered)} транзакций")
     return filtered
+
+
+# ===========================
+# 4. Последние 4 цифры карты
+# ===========================
+
+
+def get_last_digits(card_number: Optional[str]) -> str:
+    """Функция возвращает 4 последние цифры"""
+    try:
+        card_number = str(card_number).replace("*", "")
+        logger.debug(f"Обработка номера карты: {card_number}")
+        if len(card_number) != 4 or not card_number.isdigit():
+            raise ValueError("Ошибка формата номера карты")
+        else:
+            logger.info(f"Успешно получены последние 4 цифры карты: {card_number}")
+            return card_number
+
+    except Exception as exp:
+        logger.error(f"Ошибка типа данных для card_number={card_number}: {exp}")
+        return "0000"
