@@ -2,6 +2,7 @@
 
 import logging
 import os
+from pathlib import Path
 from typing import List
 
 import pandas as pd
@@ -12,9 +13,10 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-os.makedirs("logs", exist_ok=True)
+LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-file_handler = logging.FileHandler("logs/file_processing.log", mode="w", encoding="utf-8")
+file_handler = logging.FileHandler(LOG_DIR / "file_processing.log", mode="w", encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
 file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")

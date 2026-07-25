@@ -1,8 +1,9 @@
-from typing import Dict, List
-import os
-import requests
 import logging
+import os
+from pathlib import Path
+from typing import Dict, List
 
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,9 +14,10 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-os.makedirs("logs", exist_ok=True)
+LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-file_handler = logging.FileHandler("logs/stocks_api.log", mode="w", encoding="utf-8")
+file_handler = logging.FileHandler(LOG_DIR / "stocks_api.log", mode="w", encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
 file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
@@ -23,10 +25,8 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-
 def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
     """Получает цены акций по API"""
-
 
     stocks_prices = {}
     access_key = os.getenv("STOCKS_API_KEY")
@@ -38,14 +38,14 @@ def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
 
     try:
         url = f"{api_url}/eod"
-        params= {
+        params: dict[str, str | int] = {
             "access_key": access_key,
             "symbols": ",".join(stocks),
             "limit": 5,
-            "sort": "DESC"
+            "sort": "DESC",
         }
         logger.info(f"Запрос цен у Marketstack для: {', '.join(stocks)}")
-        response= requests.get(url, params=params, timeout =10)
+        response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
         data = response.json()
 
@@ -65,7 +65,6 @@ def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
             else:
                 logger.warning(f"Для {symbol} не удалось получить цену")
                 stocks_prices[symbol] = 0.0
-
 
         for stock in stocks:
             if stock not in stocks_prices:
