@@ -2,10 +2,9 @@
 
 import json
 import logging
-import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
@@ -292,7 +291,7 @@ def main_page(date_time: str, excel_path: str = "data/operations.xlsx") -> Dict:
 # ====================
 
 
-def save_response_to_json(response: Dict, output_path: str = "output/main_page.json") -> None:
+def save_response_to_json(response: Union[Dict, List], output_path: str = "output/main_page.json") -> None:
     """Функция, которая сохраняет JSON ответ в файл"""
     full_path = Path(__file__).resolve().parent.parent / output_path
     full_path.parent.mkdir(parents=True, exist_ok=True)
