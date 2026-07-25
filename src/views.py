@@ -4,13 +4,15 @@ import json
 import logging
 import os
 from datetime import datetime
-from os import access
 from pathlib import Path
 from typing import Dict, List, Optional
+from src.stocks_api import get_stock_prices
+from src.external_api import convert_currency
 
 import pandas as pd
 
 from src.file_processing import read_excel_operations
+from src.utils import greeting
 
 # ====================
 # Файл настройки
@@ -210,7 +212,75 @@ def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
         )
     return top_transactions
 
+# ====================
+# 7. Курсы валют
+# ====================
 
+def get_currency_rates(currencies: List[str]) -> Dict[str, float]:
+    """
+    Получает курсы валют через convert_currency().
+    """
+    rates = {}
+    for currency in currencies:
+        rate = convert_currency({"amount": 1, "currency": currency})
+        if rate > 0:
+            rates[currency] = rate
+    logger.info(f"Получены курсы валют: {rates}")
+    return rates
 
+# ====================
+# 8. ГЛАВНАЯ СТРАНИЦА
+# ====================
 
-pass
+def main_page(date_time:str, excel_path :str ="data/operations.xlsx") -> Dict:
+        """Функция для страницы - Главная"""
+        try:
+                logger.info(f"Генерация Главной страницы для: {date_time}")
+            # 1. Загрузка данных
+                df = load_transactions(excel_path)
+                if df.empty:
+                    return {"greeting": greeting(date_time), "cards":[],
+                            "top_transactions": [], "currency_rates": {}, "stock_prices": {}
+                            }
+            # 2. фильтр по дате
+                df_filtered = filter_by_date(df, date_time)
+                if df_filtered.empty:
+                    return {"greeting": greeting(date_time), "cards": [], "top_transactions": [], "currency_rates": {},
+                            "stock_prices": {}}
+                # 3. Настройки пользователя
+                settings = load_user_settings()
+                currencies = settings.get("user_currencies", [])
+                stocks = settings.get("user_stocks", [])
+
+                # 4. Курсы валют
+                currency_rates = get_currency_rates(currencies)
+
+                # 5. Цены акций
+                stock_prices = get_stock_prices(stocks)
+
+                # 6. Формируем ответ
+                response = {
+                    "greeting": greeting(date_time),
+                    "cards": get_card_transactions(df_filtered),
+                    "top_transactions": get_top_transactions(df_filtered, 5),
+                    "currency_rates": currency_rates,
+                    "stock_prices": stock_prices
+                }
+                logger.info("JSON-ответ для Главной страницы готов")
+                return response
+        except Exception as exp:
+            logger.error(f"Ошибка {exp}")
+            return {"error": str(exp)}
+
+# ====================
+# 9. Сохранение JSON
+# ====================
+
+def save_response_to_json(response:Dict, output_path:str="output/main_page.json")->None:
+    """Функция, которая сохраняет JSON ответ в файл"""
+
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(response, f, ensure_ascii=False, indent=2)
+        logger.info(f"ОТвет сохранен в {output_path}")
+        print(f"ОТвет сохранен в {output_path}")
