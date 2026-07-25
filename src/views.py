@@ -4,6 +4,7 @@ import json
 import logging
 import os
 from datetime import datetime
+from os import access
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -210,12 +211,6 @@ def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
     return top_transactions
 
 
-# ====================
-# 7. Цены акций
-# ====================
-def get_stock_prices() -> None:
-    """Получает цены акций по API"""
-    # заглушка. найти где-нибудь АПИ
 
 
 pass
