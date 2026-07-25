@@ -1,7 +1,63 @@
 {
-  "greeting": "Доброй ночи!",
-  "cards": [],
-  "top_transactions": [],
-  "currency_rates": {},
-  "stock_prices": {}
+  "greeting": "Добрый день!",
+  "cards": [
+    {
+      "last_digits": "4556",
+      "total_expenses": 3775,
+      "cashback": 37
+    },
+    {
+      "last_digits": "5091",
+      "total_expenses": 15193,
+      "cashback": 151
+    },
+    {
+      "last_digits": "7197",
+      "total_expenses": 24155,
+      "cashback": 241
+    }
+  ],
+  "top_transactions": [
+    {
+      "date": "22.12.2021",
+      "amount": -28001,
+      "category": "Переводы",
+      "description": "Перевод Кредитная карта. ТП 10.2 RUR"
+    },
+    {
+      "date": "30.12.2021",
+      "amount": -20000,
+      "category": "Переводы",
+      "description": "Константин Л."
+    },
+    {
+      "date": "16.12.2021",
+      "amount": -14216,
+      "category": "ЖКХ",
+      "description": "ЖКУ Квартира"
+    },
+    {
+      "date": "23.12.2021",
+      "amount": -10000,
+      "category": "Переводы",
+      "description": "Светлана Т."
+    },
+    {
+      "date": "02.12.2021",
+      "amount": -5510,
+      "category": "Каршеринг",
+      "description": "Ситидрайв"
+    }
+  ],
+  "currency_rates": {
+    "USD": 78.18,
+    "EUR": 88.93
+  },
+  "stock_prices": {
+    "MSFT": 381.7,
+    "AMZN": 232.11,
+    "GOOGL": 319.74,
+    "TSLA": 313.03,
+    "AAPL": 333.02
+  }
 }
