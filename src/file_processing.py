@@ -13,7 +13,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOG_DIR = Path(__file__).parent.parent / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 file_handler = logging.FileHandler(LOG_DIR / "file_processing.log", mode="w", encoding="utf-8")

@@ -12,7 +12,7 @@ from src.file_processing import read_excel_operations
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOG_DIR = Path(__file__).parent.parent / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 file_handler = logging.FileHandler(LOG_DIR / "views.log", mode="w", encoding="utf-8")

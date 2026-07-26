@@ -17,8 +17,8 @@ from src.utils import greeting
 # Файл настройки
 # ====================
 # SETTINGS_PATH = "user_settings.json"
-# BASE_DIR = Path(__file__).resolve().parent.parent
-SETTINGS_PATH = Path(__file__).resolve().parent.parent / "user_settings.json"
+# BASE_DIR = Path(__file__).parent.parent
+SETTINGS_PATH = Path(__file__).parent.parent / "user_settings.json"
 
 # ====================
 # Настройка логгера
@@ -26,7 +26,7 @@ SETTINGS_PATH = Path(__file__).resolve().parent.parent / "user_settings.json"
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOG_DIR = Path(__file__).parent.parent / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 file_handler = logging.FileHandler(LOG_DIR / "views.log", mode="w", encoding="utf-8")
@@ -175,10 +175,14 @@ def get_card_transactions(df: pd.DataFrame) -> List[Dict]:
     for index, row in grouped.iterrows():
         card_number = row["card_number"]
         expenses = float(row["abs_amount"])
-       # cashback = round(expenses // 100, 2)  # 1 рубль на каждые 100 рублей
+        # cashback = round(expenses // 100, 2)  # 1 рубль на каждые 100 рублей
         cashback = expenses / 100
         card_data.append(
-            {"last_digits": get_last_digits(card_number), "total_expenses": round(expenses, 2), "cashback": round(cashback, 2)}
+            {
+                "last_digits": get_last_digits(card_number),
+                "total_expenses": round(expenses, 2),
+                "cashback": round(cashback, 2),
+            }
         )
 
     logger.info(f"Найдено {len(card_data)} карт")
@@ -294,7 +298,7 @@ def main_page(date_time: str, excel_path: str = "data/operations.xlsx") -> Dict:
 
 def save_response_to_json(response: Union[Dict, List], output_path: str = "output/main_page.json") -> None:
     """Функция, которая сохраняет JSON ответ в файл"""
-    full_path = Path(__file__).resolve().parent.parent / output_path
+    full_path = Path(__file__).parent.parent / output_path
     full_path.parent.mkdir(parents=True, exist_ok=True)
     # full_path.parent.mkdir(exist_ok=True)
     with open(full_path, "w", encoding="utf-8") as f:

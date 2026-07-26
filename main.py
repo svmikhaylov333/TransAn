@@ -1,7 +1,8 @@
 import json
 
+from src.reports import spending_by_category
 from src.services import get_cashback_categories
-from src.views import main_page, save_response_to_json
+from src.views import load_transactions, main_page, save_response_to_json
 
 # import sys
 # from pathlib import Path
@@ -39,6 +40,24 @@ def run_services() -> None:
         print("Нет данных для анализа кешбэка")
 
 
+# ====================
+# Отчеты
+# ====================
+#   1. Траты по категории
+def run_reports() -> None:
+    """Отчет по категории за последние 3 месяца"""
+
+    operations = load_transactions(excel_path)
+    if operations.empty:
+        print("Нет данных для отчета")
+        return
+    # date = "2021-12-31 12:00:00"
+    cat = "Супермаркеты"
+    # spending_by_category(operations, cat, date)
+    spending_by_category(operations, cat)
+
+
 if __name__ == "__main__":
     main()
     run_services()
+    run_reports()
