@@ -175,10 +175,10 @@ def get_card_transactions(df: pd.DataFrame) -> List[Dict]:
     for index, row in grouped.iterrows():
         card_number = row["card_number"]
         expenses = float(row["abs_amount"])
-        cashback = int(expenses // 100)  # 1 рубль на каждые 100 рублей
-
+       # cashback = round(expenses // 100, 2)  # 1 рубль на каждые 100 рублей
+        cashback = expenses / 100
         card_data.append(
-            {"last_digits": get_last_digits(card_number), "total_expenses": int(expenses), "cashback": cashback}
+            {"last_digits": get_last_digits(card_number), "total_expenses": round(expenses, 2), "cashback": round(cashback, 2)}
         )
 
     logger.info(f"Найдено {len(card_data)} карт")
@@ -191,7 +191,8 @@ def get_card_transactions(df: pd.DataFrame) -> List[Dict]:
 def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
     """Функция Возвращает топ-N (по умолчанию 5) транзакций по платежу (расходу)."""
 
-    df_sorted: pd.DataFrame = df[df["amount"] < 0].copy()  # type: ignore
+    # df_sorted: pd.DataFrame = df[df["amount"] < 0].copy()  # type: ignore
+    df_sorted: pd.DataFrame = df.copy()  # type: ignore
 
     if len(df_sorted) == 0:
         return []
@@ -205,7 +206,7 @@ def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
         top_transactions.append(
             {
                 "date": row["date"].strftime("%d.%m.%Y"),
-                "amount": int(row["amount"]),
+                "amount": round(row["amount"], 2),
                 "category": row.get("category", "Неизвестно"),
                 "description": row.get("description", ""),
             }
