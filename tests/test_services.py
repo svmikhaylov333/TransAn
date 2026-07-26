@@ -22,10 +22,8 @@ def test_get_cashback_categories_success(mock_read: MagicMock, sample_df: pd.Dat
     result = get_cashback_categories("test.xlsx", 3)
 
     assert len(result) == 2
-    assert result[0]["category"] == "Различные товары"
-    assert result[0]["cashback"] == 5
-    assert result[1]["category"] == "Супермаркеты"
-    assert result[1]["cashback"] == 4
+    assert result["Различные товары"] == 5
+    assert result["Супермаркеты"] == 4
 
 
 @patch("src.services.read_excel_operations")
@@ -33,7 +31,7 @@ def test_get_cashback_categories_empty_file(mock_read: MagicMock) -> None:
     """Тест - файл пустой"""
     mock_read.return_value = []
     result = get_cashback_categories("test.xlsx", 3)
-    assert result == []
+    assert result == {}
 
 
 @patch("src.services.read_excel_operations")
@@ -45,7 +43,7 @@ def test_get_cashback_categories_no_expenses(mock_read: MagicMock) -> None:
     ]
     mock_read.return_value = test_data
     result = get_cashback_categories("test.xlsx", 3)
-    assert result == []
+    assert result == {}
 
 
 @patch("src.services.read_excel_operations")
@@ -57,4 +55,4 @@ def test_get_cashback_categories_missing_columns(mock_read: MagicMock) -> None:
     ]
     mock_read.return_value = test_data
     result = get_cashback_categories("test.xlsx", 3)
-    assert result == []
+    assert result == {}

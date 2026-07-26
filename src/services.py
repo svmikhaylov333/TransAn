@@ -24,7 +24,7 @@ logger.addHandler(file_handler)
 
 
 # Выгодные категории повышенного кешбэка
-def get_cashback_categories(excel_path: str = "data/operations.xlsx", top_n: int = 3) -> List[Dict]:
+def get_cashback_categories(excel_path: str = "data/operations.xlsx", top_n: int = 3) -> Dict[str, int]:
     """
       Возвращает топ-N категорий с наибольшим кешбэком.
       Кешбэк = 1 рубль на каждые 100 рублей трат.
@@ -41,7 +41,7 @@ def get_cashback_categories(excel_path: str = "data/operations.xlsx", top_n: int
     operations = read_excel_operations(excel_path)
     if not operations:
         logger.warning(f"Не удалось загрузить данные из {excel_path}")
-        return []
+        return {}
     df = pd.DataFrame(operations)
     df.columns = df.columns.str.lower()
 
@@ -52,7 +52,7 @@ def get_cashback_categories(excel_path: str = "data/operations.xlsx", top_n: int
         df["amount"] = df["amount"].astype(float)
     else:
         logger.error("Колонка с суммой не найдена")
-        return []
+        return {}
 
     # категории
     if "категория" in df.columns:
@@ -61,13 +61,13 @@ def get_cashback_categories(excel_path: str = "data/operations.xlsx", top_n: int
         df["category"] = df["category"]
     else:
         logger.error("Колонка с категорией не найдена")
-        return []
+        return {}
 
     # Фильтр расходов
     expenses = df[df["amount"] < 0].copy()
     if expenses.empty:
         logger.info("Нет расходов для анализа")
-        return []
+        return {}
 
     expenses["amount"] = abs(expenses["amount"])
 
@@ -83,7 +83,7 @@ def get_cashback_categories(excel_path: str = "data/operations.xlsx", top_n: int
     # топ N категорий
     top = grouped.head(top_n)
 
-    result = top[["category", "cashback"]].to_dict("records")
+    result = dict(zip(top["category"], top["cashback"]))
     logger.info(f"Найдено {len(result)} категорий с кешбэком")
     return result
 
