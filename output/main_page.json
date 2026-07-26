@@ -50,8 +50,7 @@
     }
   ],
   "currency_rates": {
-    "USD": 78.18,
-    "EUR": 88.93
+    "USD": 78.18
   },
   "stock_prices": {
     "GOOGL": 319.74,
