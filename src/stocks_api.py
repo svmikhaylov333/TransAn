@@ -28,7 +28,7 @@ logger.addHandler(file_handler)
 def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
     """Получает цены акций по API"""
 
-    stocks_prices = {}
+    stocks_prices: Dict[str, float] = {}
     # fallback_prices = {
     #     "AAPL": 339.59,
     #     "AMZN": 231.34,
@@ -36,7 +36,7 @@ def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
     #     "MSFT": 397.30,
     #     "TSLA": 305.95,
     # }
-    fallback_prices = {
+    fallback_prices: Dict[str, float] = {
         "AAPL": 1,
         "AMZN": 1,
         "GOOGL": 1,
@@ -81,7 +81,6 @@ def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
                 logger.info(f"{symbol}: ${stocks_prices[symbol]}")
             else:
                 logger.warning(f"Для {symbol} не удалось получить цену, используем цену по-умолчанию")
-
 
         # for stock in stocks:
         #     if stock not in stocks_prices:
