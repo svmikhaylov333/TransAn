@@ -10,8 +10,8 @@ def test_get_stock_prices_no_key(mock_getenv: MagicMock) -> None:
 
     result = get_stock_prices(["AAPL", "MSFT"])
 
-    assert result["AAPL"] == 0.0
-    assert result["MSFT"] == 0.0
+    assert result["AAPL"] == 1.0
+    assert result["MSFT"] == 1.0
 
 
 @patch("src.stocks_api.requests.get")
@@ -42,4 +42,4 @@ def test_get_stock_prices_api_error(mock_getenv: MagicMock, mock_get: MagicMock)
 
     result = get_stock_prices(["AAPL"])
 
-    assert result["AAPL"] == 0.0
+    assert result["AAPL"] == 1.0

@@ -19,18 +19,6 @@
   ],
   "top_transactions": [
     {
-      "date": "30.12.2021",
-      "amount": 174000.0,
-      "category": "Пополнения",
-      "description": "Пополнение через Газпромбанк"
-    },
-    {
-      "date": "22.12.2021",
-      "amount": 28001.94,
-      "category": "Переводы",
-      "description": "Перевод Кредитная карта. ТП 10.2 RUR"
-    },
-    {
       "date": "22.12.2021",
       "amount": -28001.94,
       "category": "Переводы",
@@ -43,20 +31,33 @@
       "description": "Константин Л."
     },
     {
+      "date": "16.12.2021",
+      "amount": -14216.42,
+      "category": "ЖКХ",
+      "description": "ЖКУ Квартира"
+    },
+    {
       "date": "23.12.2021",
-      "amount": 20000.0,
-      "category": "Другое",
-      "description": "Иван С."
+      "amount": -10000.0,
+      "category": "Переводы",
+      "description": "Светлана Т."
+    },
+    {
+      "date": "02.12.2021",
+      "amount": -5510.8,
+      "category": "Каршеринг",
+      "description": "Ситидрайв"
     }
   ],
   "currency_rates": {
-    "USD": 78.18
+    "USD": 78.75,
+    "EUR": 89.68
   },
   "stock_prices": {
-    "GOOGL": 319.74,
-    "MSFT": 381.7,
-    "AAPL": 333.02,
-    "AMZN": 232.11,
-    "TSLA": 313.03
+    "AAPL": 1,
+    "AMZN": 1,
+    "GOOGL": 1,
+    "MSFT": 1,
+    "TSLA": 1
   }
 }

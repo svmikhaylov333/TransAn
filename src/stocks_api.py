@@ -29,12 +29,29 @@ def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
     """Получает цены акций по API"""
 
     stocks_prices = {}
+    # fallback_prices = {
+    #     "AAPL": 339.59,
+    #     "AMZN": 231.34,
+    #     "GOOGL": 333.83,
+    #     "MSFT": 397.30,
+    #     "TSLA": 305.95,
+    # }
+    fallback_prices = {
+        "AAPL": 1,
+        "AMZN": 1,
+        "GOOGL": 1,
+        "MSFT": 1,
+        "TSLA": 1,
+    }
+    for stock in stocks:
+        stocks_prices[stock] = fallback_prices.get(stock, 1)
+
     access_key = os.getenv("STOCKS_API_KEY")
     api_url = os.getenv("STOCKS_API_URL", "https://api.apilayer.net/marketstack/v2")
 
     if not access_key:
         logger.error("STOCKS_API_KEY не найден")
-        return {stock: 0.0 for stock in stocks}
+        return stocks_prices
 
     try:
         url = f"{api_url}/eod"
@@ -52,7 +69,7 @@ def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
         # Проверка получения данных
         if not data.get("data"):
             logger.error("В ответе Marketstack нет данных")
-            return {stock: 0.0 for stock in stocks}
+            return stocks_prices
 
         # цены
         for item in data["data"]:
@@ -63,16 +80,16 @@ def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
                 stocks_prices[symbol] = round(close_price, 2)
                 logger.info(f"{symbol}: ${stocks_prices[symbol]}")
             else:
-                logger.warning(f"Для {symbol} не удалось получить цену")
-                stocks_prices[symbol] = 0.0
+                logger.warning(f"Для {symbol} не удалось получить цену, используем цену по-умолчанию")
 
-        for stock in stocks:
-            if stock not in stocks_prices:
-                logger.warning(f"Тикер {stock} отсутствует в ответе API")
-                stocks_prices[stock] = 0.0
+
+        # for stock in stocks:
+        #     if stock not in stocks_prices:
+        #         logger.warning(f"Тикер {stock} отсутствует в ответе API")
+        #         stocks_prices[stock] = fallback_prices.get(stock, 1)
 
         return stocks_prices
 
     except Exception as exp:
         logger.error(f"Ошибка: {exp}")
-        return {stock: 0.0 for stock in stocks}
+        return stocks_prices

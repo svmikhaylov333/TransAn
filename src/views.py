@@ -195,15 +195,20 @@ def get_card_transactions(df: pd.DataFrame) -> List[Dict]:
 def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
     """Функция Возвращает топ-N (по умолчанию 5) транзакций по платежу (расходу)."""
 
-    # df_sorted: pd.DataFrame = df[df["amount"] < 0].copy()  # type: ignore
-    df_sorted: pd.DataFrame = df.copy()  # type: ignore
+    df_sorted: pd.DataFrame = df[df["amount"] < 0].copy()  # type: ignore
+    # df_sorted: pd.DataFrame = df.copy()  # type: ignore
 
     if len(df_sorted) == 0:
         return []
 
+    # Сортировка по абсолютной сумме
     df_sorted["abs_amount"] = abs(df_sorted["amount"])
     df_sorted = df_sorted.sort_values("abs_amount", ascending=False)
     df_sorted = df_sorted.head(n)
+
+    # # Сортировка по убыванию
+    # df_sorted = df_sorted.sort_values("amount", ascending=False)
+    # df_sorted = df_sorted.head(n)
 
     top_transactions = []
     for index, row in df_sorted.iterrows():
@@ -228,10 +233,20 @@ def get_currency_rates(currencies: List[str]) -> Dict[str, float]:
     Получает курсы валют через convert_currency().
     """
     rates = {}
+    # fallback_rates = {
+    #     "USD": 78.7,
+    #     "EUR": 89.63,
+    # }
+    fallback_rates = {
+        "USD": 1,
+        "EUR": 1,
+    }
     for currency in currencies:
         rate = convert_currency({"amount": 1, "currency": currency})
         if rate > 0:
             rates[currency] = rate
+        else:
+            rates[currency] = fallback_rates.get(currency, 1.0)
     logger.info(f"Получены курсы валют: {rates}")
     return rates
 
