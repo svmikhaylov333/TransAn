@@ -34,9 +34,9 @@ def test_get_stock_prices_success(mock_getenv: MagicMock, mock_get: MagicMock) -
 
     assert len(result) == 2
     assert result[0]["stock"] == "AAPL"
-    assert result[0]["price"] == 1.0
+    assert result[0]["price"] == 175.34
     assert result[1]["stock"] == "MSFT"
-    assert result[1]["price"] == 1.0
+    assert result[1]["price"] == 420.12
 
 
 @patch("src.stocks_api.requests.get")
