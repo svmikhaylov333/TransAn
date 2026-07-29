@@ -76,10 +76,12 @@ def get_stock_prices(stocks: List[str]) -> List[Dict[str, float]]:
         for item in data["data"]:
             symbol = item.get("symbol")
             close_price = item.get("close")
-
             if symbol and close_price is not None:
-                stocks_prices[symbol] = round(close_price, 2)
-                logger.info(f"{symbol}: ${stocks_prices[symbol]}")
+                for stock_item in stocks_prices:
+                    if stock_item["stock"] == symbol:
+                        stock_item["price"] = round(close_price, 2)
+                        logger.info(f"{symbol}: ${stock_item['price']}")
+                        break
             else:
                 logger.warning(f"Для {symbol} не удалось получить цену, используем цену по-умолчанию")
 
