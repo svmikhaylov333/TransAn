@@ -193,7 +193,7 @@ def get_card_transactions(df: pd.DataFrame) -> List[Dict]:
 # 6. Топ-5 транзакций
 # ====================
 def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
-    """Функция Возвращает топ-N (по умолчанию 5) транзакций по платежу (расходу)."""
+    """Функция Возвращает топ-N (по умолчанию 5) транзакций."""
 
     # df_sorted: pd.DataFrame = df[df["amount"] < 0].copy()  # type: ignore
     df_sorted: pd.DataFrame = df.copy()  # type: ignore
@@ -201,8 +201,13 @@ def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
     if len(df_sorted) == 0:
         return []
 
-    df_sorted["abs_amount"] = abs(df_sorted["amount"])
-    df_sorted = df_sorted.sort_values("abs_amount", ascending=False)
+    # Сортировка по абсолютной сумме
+    # df_sorted["abs_amount"] = abs(df_sorted["amount"])
+    # df_sorted = df_sorted.sort_values("abs_amount", ascending=False)
+    # df_sorted = df_sorted.head(n)
+
+    # # Сортировка по убыванию
+    df_sorted = df_sorted.sort_values("amount", ascending=False)
     df_sorted = df_sorted.head(n)
 
     top_transactions = []
@@ -223,18 +228,41 @@ def get_top_transactions(df: pd.DataFrame, n: int = 5) -> List[Dict]:
 # ====================
 
 
-def get_currency_rates(currencies: List[str]) -> Dict[str, float]:
+def get_currency_rates(currencies: List[str]) -> List[Dict[str, float]]:
     """
     Получает курсы валют через convert_currency().
     """
-    rates = {}
+    rates = []
+    # fallback_rates = {
+    #     "USD": 78.7,
+    #     "EUR": 89.63,
+    # }
+    fallback_rates = {
+        "USD": 1.0,
+        "EUR": 1.0,
+    }
+    # for currency in currencies:
+    #     rate = convert_currency({"amount": 1, "currency": currency})
+    #     if rate > 0:
+    #         rates[currency] = rate
+    #     else:
+    #         rates[currency] = fallback_rates.get(currency, 1.0)
+    # logger.info(f"Получены курсы валют: {rates}")
+    # return rates
+
     for currency in currencies:
-        rate = convert_currency({"amount": 1, "currency": currency})
-        if rate > 0:
-            rates[currency] = rate
+        try:
+            rate = convert_currency({"amount": 1, "currency": currency})
+            if rate > 0:
+                rates.append({"currency": currency, "rate": rate})
+
+            else:
+                rates.append({"currency": currency, "rate": fallback_rates.get(currency, 1.0)})
+        except Exception:
+            rates.append({"currency": currency, "rate": fallback_rates.get(currency, 1.0)})
+
     logger.info(f"Получены курсы валют: {rates}")
     return rates
-
 
 # ====================
 # 8. ГЛАВНАЯ СТРАНИЦА
@@ -252,8 +280,8 @@ def main_page(date_time: str, excel_path: str = "data/operations.xlsx") -> Dict:
                 "greeting": greeting(date_time),
                 "cards": [],
                 "top_transactions": [],
-                "currency_rates": {},
-                "stock_prices": {},
+                "currency_rates": [],
+                "stock_prices": [],
             }
         # 2. фильтр по дате
         df_filtered = filter_by_date(df, date_time)
@@ -262,8 +290,8 @@ def main_page(date_time: str, excel_path: str = "data/operations.xlsx") -> Dict:
                 "greeting": greeting(date_time),
                 "cards": [],
                 "top_transactions": [],
-                "currency_rates": {},
-                "stock_prices": {},
+                "currency_rates": [],
+                "stock_prices": [],
             }
         # 3. Настройки пользователя
         settings = load_user_settings()
