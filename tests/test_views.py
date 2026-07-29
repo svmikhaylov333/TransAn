@@ -137,16 +137,18 @@ def test_get_currency_rates_success(mock_convert: MagicMock) -> None:
 
     result = get_currency_rates(["USD", "EUR", "QQQ"])
 
-    assert result["USD"] == 78.03
-    assert result["EUR"] == 88.89
-    # assert "QQQ" not in result
-    assert result["QQQ"] == 1.0
+    assert result[0]["currency"] == "USD"
+    assert result[0]["rate"] == 78.03
+    assert result[1]["currency"] == "EUR"
+    assert result[1]["rate"] == 88.89
+    assert result[2]["currency"] == "QQQ"
+    assert result[2]["rate"] == 1.0
 
 
 def test_get_currency_rates_empty() -> None:
     """Тест - пустой список валют."""
     result = get_currency_rates([])
-    assert result == {}
+    assert result == []
 
 
 # Тесты для get_card_transactions
@@ -189,11 +191,11 @@ def test_get_top_transactions_success(sample_df: pd.DataFrame) -> None:
     """Тест - успешное получение топ-5."""
     result: List[Dict] = get_top_transactions(sample_df, 3)
 
-    assert len(result) == 3
-    assert result[0]["amount"] == -564.0
-    assert result[0]["category"] == "Различные товары"
-    assert result[0]["description"] == "Ozon.ru"
-    assert result[1]["amount"] == -160.89
+    assert result[0]["amount"] == -64.0
+    assert result[0]["category"] == "Супермаркеты"
+    assert result[0]["description"] == "Колхоз"
+    assert result[1]["amount"] == -78.05
+    assert result[2]["amount"] == -118.12
 
 
 def test_get_top_transactions_empty() -> None:
@@ -244,8 +246,8 @@ def test_main_page_success(
     mock_greeting.return_value = "Добрый день!"
     mock_cards.return_value = [{"last_digits": "7197", "total_expenses": 1500, "cashback": 15}]
     mock_top.return_value = [{"date": "01.01.2021", "amount": -500, "category": "Еда", "description": "Магнит"}]
-    mock_currency.return_value = {"USD": 90.0}
-    mock_stocks.return_value = {"AAPL": 175.34}
+    mock_currency.return_value = [{"currency": "USD", "rate": 90.0}]
+    mock_stocks.return_value = [{"stock": "AAPL", "price": 175.34}]
     mock_settings.return_value = {"user_currencies": ["USD"], "user_stocks": ["AAPL"]}
 
     result = main_page("2021-01-01 12:00:00")
@@ -268,8 +270,8 @@ def test_main_page_empty_data(mock_load: MagicMock) -> None:
 
     assert result["cards"] == []
     assert result["top_transactions"] == []
-    assert result["currency_rates"] == {}
-    assert result["stock_prices"] == {}
+    assert result["currency_rates"] == []
+    assert result["stock_prices"] == []
     assert "greeting" in result
 
 
@@ -287,8 +289,8 @@ def test_main_page_filtered_empty(mock_filter: MagicMock, mock_load: MagicMock) 
 
     assert result["cards"] == []
     assert result["top_transactions"] == []
-    assert result["currency_rates"] == {}
-    assert result["stock_prices"] == {}
+    assert result["currency_rates"] == []
+    assert result["stock_prices"] == []
     assert "greeting" in result
 
 

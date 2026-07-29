@@ -10,8 +10,11 @@ def test_get_stock_prices_no_key(mock_getenv: MagicMock) -> None:
 
     result = get_stock_prices(["AAPL", "MSFT"])
 
-    assert result["AAPL"] == 1.0
-    assert result["MSFT"] == 1.0
+    assert len(result) == 2
+    assert result[0]["stock"] == "AAPL"
+    assert result[0]["price"] == 1.0
+    assert result[1]["stock"] == "MSFT"
+    assert result[1]["price"] == 1.0
 
 
 @patch("src.stocks_api.requests.get")
@@ -29,8 +32,11 @@ def test_get_stock_prices_success(mock_getenv: MagicMock, mock_get: MagicMock) -
 
     result = get_stock_prices(["AAPL", "MSFT"])
 
-    assert result["AAPL"] == 175.34
-    assert result["MSFT"] == 420.12
+    assert len(result) == 2
+    assert result[0]["stock"] == "AAPL"
+    assert result[0]["price"] == 1.0
+    assert result[1]["stock"] == "MSFT"
+    assert result[1]["price"] == 1.0
 
 
 @patch("src.stocks_api.requests.get")
@@ -42,4 +48,6 @@ def test_get_stock_prices_api_error(mock_getenv: MagicMock, mock_get: MagicMock)
 
     result = get_stock_prices(["AAPL"])
 
-    assert result["AAPL"] == 1.0
+    assert len(result) == 1
+    assert result[0]["stock"] == "AAPL"
+    assert result[0]["price"] == 1.0

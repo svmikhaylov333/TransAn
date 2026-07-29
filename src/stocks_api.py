@@ -25,10 +25,10 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
+def get_stock_prices(stocks: List[str]) -> List[Dict[str, float]]:
     """Получает цены акций по API"""
 
-    stocks_prices: Dict[str, float] = {}
+
     # fallback_prices = {
     #     "AAPL": 339.59,
     #     "AMZN": 231.34,
@@ -37,14 +37,15 @@ def get_stock_prices(stocks: List[str]) -> Dict[str, float]:
     #     "TSLA": 305.95,
     # }
     fallback_prices: Dict[str, float] = {
-        "AAPL": 1,
-        "AMZN": 1,
-        "GOOGL": 1,
-        "MSFT": 1,
-        "TSLA": 1,
+        "AAPL": 1.0,
+        "AMZN": 1.0,
+        "GOOGL": 1.0,
+        "MSFT": 1.0,
+        "TSLA": 1.0,
     }
+    stocks_prices: List[Dict[str, float]] = []
     for stock in stocks:
-        stocks_prices[stock] = fallback_prices.get(stock, 1)
+        stocks_prices.append({"stock": stock, "price": fallback_prices.get(stock, 1.0)})
 
     access_key = os.getenv("STOCKS_API_KEY")
     api_url = os.getenv("STOCKS_API_URL", "https://api.apilayer.net/marketstack/v2")
